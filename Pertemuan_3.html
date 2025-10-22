@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 Celestial Resto Menu</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-attachment: fixed;
+    color: #fff;
+    text-align: center;
+  }
+
+  h1 {
+    margin-top: 30px;
+    font-size: 2.5em;
+    text-shadow: 0 0 10px #b4aaff;
+  }
+
+  .menu-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px;
+  }
+
+  .menu-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgba(180, 170, 255, 0.4);
+    transition: transform 0.3s ease;
+  }
+
+  .menu-card:hover {
+    transform: scale(1.05);
+  }
+
+  .menu-card img {
+    width: 100%;
+    border-radius: 15px;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .menu-info {
+    margin-top: 10px;
+  }
+
+  .menu-info h3 {
+    margin: 10px 0 5px 0;
+  }
+
+  .best-seller {
+    color: gold;
+    font-weight: bold;
+    text-shadow: 0 0 5px #ffb700;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .btn {
+    background-color: #b4aaff;
+    border: none;
+    color: #000;
+    padding: 5px 12px;
+    border-radius: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .btn:hover {
+    background-color: #d3ccff;
+  }
+
+  #total {
+    font-size: 1.3em;
+    margin: 20px;
+    text-shadow: 0 0 10px #fff;
+  }
+
+  .category {
+    margin-top: 60px;
+    font-size: 1.8em;
+    text-shadow: 0 0 8px #a0a0ff;
+  }
+</style>
+</head>
+<body>
+
+<h1>✨ Celestial Resto Menu ✨</h1>
+
+<h2 class="category">Main Dishes</h2>
+<div class="menu-container" id="main-dishes">
+  <!-- Menu utama -->
+</div>
+
+<h2 class="category">Drinks</h2>
+<div class="menu-container" id="drinks">
+  <!-- Menu minuman -->
+</div>
+
+<h2 class="category">Kids Menu</h2>
+<div class="menu-container" id="kids">
+  <!-- Menu anak -->
+</div>
+
+<div id="total">Total Pesanan: 0 item</div>
+
+<script>
+const menus = {
+  "main-dishes": [
+    {name: "Chicken Rice Stars", price: 35000, img: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=800&q=80", best: true},
+    {name: "Pasta Aurora", price: 40000, img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=800&q=80"},
+    {name: "Lunar Burger", price: 38000, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80"}
+  ],
+  "drinks": [
+    {name: "Galaxy Tea", price: 20000, img: "https://images.unsplash.com/photo-1561043433-aaf687c4cf4e?auto=format&fit=crop&w=800&q=80", best: true},
+    {name: "Soda Moon", price: 18000, img: "https://images.unsplash.com/photo-1617196034796-73e9f05f0133?auto=format&fit=crop&w=800&q=80"},
+    {name: "Starlight Coffee", price: 22000, img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"}
+  ],
+  "kids": [
+    {name: "Mini Star Nuggets", price: 25000, img: "https://images.unsplash.com/photo-1601050690597-1d5d5e75e97a?auto=format&fit=crop&w=800&q=80"},
+    {name: "Milky Way Ice Cream", price: 20000, img: "https://images.unsplash.com/photo-1599785209707-28ab00a5c2d1?auto=format&fit=crop&w=800&q=80"},
+    {name: "Little Moon Pancakes", price: 23000, img: "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=800&q=80"},
+    {name: "Starlight Juice", price: 18000, img: "https://images.unsplash.com/photo-1561047029-3000e62f07b7?auto=format&fit=crop&w=800&q=80"}
+  ]
+};
+
+let total = 0;
+
+function renderMenu() {
+  Object.keys(menus).forEach(cat => {
+    const container = document.getElementById(cat);
+    menus[cat].forEach(item => {
+      const card = document.createElement("div");
+      card.className = "menu-card";
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.name}">
+        <div class="menu-info">
+          <h3>${item.name}</h3>
+          ${item.best ? "<div class='best-seller'>⭐ Best Seller</div>" : ""}
+          <p>Rp ${item.price.toLocaleString()}</p>
+          <div class="btn-container">
+            <button class="btn" onclick="changeQty('${cat}', '${item.name}', -1)">–</button>
+            <span id="${item.name.replace(/\s+/g, '')}-qty">0</span>
+            <button class="btn" onclick="changeQty('${cat}', '${item.name}', 1)">+</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  });
+}
+
+function changeQty(category, name, delta) {
+  const id = name.replace(/\s+/g, '');
+  const qtyEl = document.getElementById(id + "-qty");
+  let qty = parseInt(qtyEl.innerText) + delta;
+  if (qty < 0) qty = 0;
+  qtyEl.innerText = qty;
+
+  total = document.querySelectorAll("span[id$='-qty']").length
+    ? Array.from(document.querySelectorAll("span[id$='-qty']")).reduce((sum, el) => sum + parseInt(el.innerText), 0)
+    : 0;
+  document.getElementById("total").innerText = `Total Pesanan: ${total} item`;
+}
+
+renderMenu();
+</script>
+
+</body>
+</html>
+
+
+
+
+
